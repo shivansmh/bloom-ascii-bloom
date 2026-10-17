@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { AsciiLily } from "@/components/AsciiLily";
 import { GithubCard } from "@/components/GithubCard";
 import { HoverWord } from "@/components/HoverWord";
+import { NowPlaying } from "@/components/NowPlaying";
 import { playPop } from "@/lib/pop-sound";
 
 export const Route = createFileRoute("/")({
