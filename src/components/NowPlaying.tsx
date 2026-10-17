@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 
-// last.fm setup: paste your username and API key here.
-// get a free key at https://www.last.fm/api/account/create
-const LASTFM_USER = "";
-const LASTFM_API_KEY = "";
+const LASTFM_USER = "blizzard_xd";
+const LASTFM_API_KEY = "f19482ccb877fec38d12746ec5857ff1";
 
 type Track = { name: string; artist: string; nowPlaying: boolean };
 
@@ -11,7 +9,6 @@ export function NowPlaying() {
   const [track, setTrack] = useState<Track | null>(null);
 
   useEffect(() => {
-    if (!LASTFM_USER || !LASTFM_API_KEY) return;
     const load = () =>
       fetch(
         `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_USER}&api_key=${LASTFM_API_KEY}&format=json&limit=1`,
@@ -33,11 +30,11 @@ export function NowPlaying() {
   }, []);
 
   return (
-    <p className="mt-6 font-mono text-[clamp(0.75rem,0.95vw,0.9rem)] tracking-wide text-muted-foreground">
-      <span className="mr-2 inline-block h-2 w-2 animate-pulse rounded-full bg-primary align-middle" />
+    <>
+      <span className="mr-3 inline-block h-[0.35em] w-[0.35em] animate-pulse rounded-full bg-primary align-baseline" />
       im playing this.{" "}
       {track ? (
-        <span className="text-foreground">
+        <span className="italic text-primary">
           {track.name} — {track.artist}
           {!track.nowPlaying && (
             <span className="text-muted-foreground"> (last listened)</span>
@@ -46,6 +43,6 @@ export function NowPlaying() {
       ) : (
         <span className="text-muted-foreground/60">nothing yet.</span>
       )}
-    </p>
+    </>
   );
 }
