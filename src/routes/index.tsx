@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AsciiLily } from "@/components/AsciiLily";
+import { GithubCard } from "@/components/GithubCard";
 import { HoverWord } from "@/components/HoverWord";
 import { playPop } from "@/lib/pop-sound";
 
