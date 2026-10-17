@@ -98,7 +98,7 @@ export function NowPlaying({ soundEnabled = true }: { soundEnabled?: boolean }) 
           </div>
         </HoverWord>
         .
-        {preview?.previewUrl && <audio ref={audio} src={preview.previewUrl} preload="none" onEnded={pause} onError={() => { setAudioFailed(true); pause(); }} />}
+        {preview?.previewUrl && <audio ref={audio} src={preview.previewUrl} preload="none" loop onError={() => { setAudioFailed(true); pause(); }} />}
         </>
       ) : (
         <span className="text-muted-foreground/60">nothing yet.</span>
