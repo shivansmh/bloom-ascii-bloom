@@ -149,3 +149,31 @@
     overflow: hidden;
   }
 }
+
+@keyframes drift-a {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(18vw, -10vh) scale(1.15);
+  }
+}
+
+@keyframes drift-b {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-14vw, -14vh) scale(0.9);
+  }
+}
+
+.drift-a {
+  animation: drift-a 22s ease-in-out infinite;
+}
+
+.drift-b {
+  animation: drift-b 28s ease-in-out infinite;
+}
