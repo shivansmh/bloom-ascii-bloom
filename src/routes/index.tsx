@@ -27,12 +27,6 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const CODE_LINKS = [
-  { label: "github profile", sub: "all of it", href: "https://github.com/yourusername" },
-  { label: "project one", sub: "repo", href: "https://github.com/yourusername/project-one" },
-  { label: "project two", sub: "repo", href: "https://github.com/yourusername/project-two" },
-];
-
 const MUSIC_LINKS = [
   { label: "soundcloud", sub: "tuesdays", href: "https://soundcloud.com/yourusername" },
 ];
@@ -40,6 +34,30 @@ const MUSIC_LINKS = [
 const BRAIN_LINKS = [
   { label: "leetcode", sub: "brain usage", href: "https://leetcode.com/yourusername" },
 ];
+
+function CodeHover() {
+  const [open, setOpen] = useState(false);
+  return (
+    <span
+      className="relative inline-block"
+      onPointerEnter={() => setOpen(true)}
+      onPointerLeave={() => setOpen(false)}
+    >
+      <span className="cursor-pointer border-b border-dashed border-primary/60 text-primary transition-colors duration-300 hover:border-primary">
+        code
+      </span>
+      <span
+        className={`absolute bottom-full left-0 z-50 mb-3 origin-bottom-left transition-all duration-300 ${
+          open
+            ? "pointer-events-auto translate-y-0 scale-100 opacity-100"
+            : "pointer-events-none translate-y-2 scale-95 opacity-0"
+        }`}
+      >
+        <GithubCard />
+      </span>
+    </span>
+  );
+}
 
 function Index() {
   useEffect(() => {
@@ -50,17 +68,18 @@ function Index() {
 
   return (
     <main className="relative grid h-screen w-screen grid-cols-1 overflow-hidden bg-background md:grid-cols-2">
-      {/* faint drifting pink glow */}
+      {/* drifting pink + gold glow */}
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="drift-a absolute -left-1/4 top-1/4 h-[60vmax] w-[60vmax] rounded-full bg-primary/10 blur-[120px]" />
-        <div className="drift-b absolute -right-1/4 bottom-0 h-[50vmax] w-[50vmax] rounded-full bg-primary/15 blur-[140px]" />
+        <div className="drift-a absolute -left-1/4 top-1/4 h-[65vmax] w-[65vmax] rounded-full bg-primary/20 blur-[110px]" />
+        <div className="drift-b absolute -right-1/4 bottom-0 h-[55vmax] w-[55vmax] rounded-full bg-primary/25 blur-[120px]" />
+        <div className="drift-gold absolute left-1/3 top-1/2 h-[40vmax] w-[40vmax] rounded-full bg-[oklch(0.8_0.12_85)] opacity-60 blur-[130px]" />
       </div>
 
       <section className="z-10 flex flex-col justify-center px-8 py-10 md:px-14">
         <h1 className="font-display text-[clamp(2.4rem,5.4vw,4.6rem)] leading-[1.0] text-foreground">
           i'm shivansh.
           <span className="mt-2 block italic">
-            i <HoverWord word="code" title="things i've built" links={CODE_LINKS} /> sometimes.
+            i <CodeHover /> sometimes.
           </span>
         </h1>
 
