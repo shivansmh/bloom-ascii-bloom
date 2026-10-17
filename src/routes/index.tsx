@@ -1,24 +1,36 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { AsciiLily } from "@/components/AsciiLily";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Shivansh — Portfolio" },
+      { name: "description", content: "Personal portfolio of Shivansh." },
+      { property: "og:title", content: "Shivansh — Portfolio" },
+      { property: "og:description", content: "Personal portfolio of Shivansh." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <main className="grid h-screen w-screen grid-cols-1 overflow-hidden bg-background md:grid-cols-2">
+      <section className="z-10 flex flex-col justify-center px-8 md:px-16">
+        <p className="font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground">Portfolio — 2026</p>
+        <h1 className="mt-6 font-display text-6xl leading-[0.95] text-foreground md:text-8xl">
+          Shivansh
+          <span className="block italic text-primary">your words here.</span>
+        </h1>
+        <p className="mt-8 max-w-md text-base text-muted-foreground">
+          A short line about who you are and what you make.
+        </p>
+      </section>
+      <section className="absolute inset-0 opacity-40 md:relative md:opacity-100">
+        <AsciiLily />
+      </section>
+    </main>
   );
 }
