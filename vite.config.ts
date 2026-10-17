@@ -10,7 +10,7 @@ const isGitHubPages = process.env.GITHUB_PAGES === "true";
 
 export default defineConfig({
   vite: {
-    base: isGitHubPages ? "/bloom-ascii-bloom/" : "/",
+    base: isGitHubPages ? "/portfolio/" : "/",
   },
   tanstackStart: {
     ...(isGitHubPages ? { prerender: { enabled: true } } : {}),
