@@ -93,7 +93,7 @@ function Index() {
             and i try to use my <HoverWord word="brain" title="proof of brain" links={BRAIN_LINKS} /> often.
           </span>
           <span className="block">
-            <NowPlaying />
+            <NowPlaying soundEnabled={sound} />
           </span>
         </h1>
 
