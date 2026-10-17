@@ -72,9 +72,10 @@ export function NowPlaying({ soundEnabled = true }: { soundEnabled?: boolean }) 
   return (
     <>
       <span className="mr-3 inline-block h-[0.35em] w-[0.35em] animate-pulse rounded-full bg-primary align-baseline" />
-      im playing this.{" "}
+      im playing{" "}
       {track ? (
-        <HoverWord word={<span className="italic">{track.name}</span>} onOpenChange={(open) => { if (!open) pause(); }}>
+        <>
+        <HoverWord word={<span className="italic">{track.name}</span>} onOpenChange={(open) => { if (open && playing) pause(); }}>
           <div className="relative w-72 max-w-[calc(100vw-32px)] rounded-lg border border-border bg-card p-4 text-foreground">
             <span className="absolute -top-2.5 left-4 rounded-full border border-primary/40 bg-card px-2 font-mono text-[0.6rem] tracking-[0.2em] text-primary">
               {track.nowPlaying ? "NOW PLAYING" : "LAST PLAYED"}
@@ -93,11 +94,12 @@ export function NowPlaying({ soundEnabled = true }: { soundEnabled?: boolean }) 
             </div>
             <div className="mt-3 font-mono text-[0.55rem] leading-relaxed text-muted-foreground">
               {previewLoading ? "finding preview…" : audioFailed || !preview?.previewUrl ? "preview unavailable" : !soundEnabled ? "sound is off" : "30-second preview"}
-              {preview?.trackViewUrl && <a href={preview.trackViewUrl} target="_blank" rel="noreferrer" className="mt-1 block text-primary hover:underline">♫ Apple Music · provided courtesy of iTunes</a>}
             </div>
-            {preview?.previewUrl && <audio ref={audio} src={preview.previewUrl} preload="none" onEnded={pause} onError={() => { setAudioFailed(true); pause(); }} />}
           </div>
         </HoverWord>
+        .
+        {preview?.previewUrl && <audio ref={audio} src={preview.previewUrl} preload="none" onEnded={pause} onError={() => { setAudioFailed(true); pause(); }} />}
+        </>
       ) : (
         <span className="text-muted-foreground/60">nothing yet.</span>
       )}
