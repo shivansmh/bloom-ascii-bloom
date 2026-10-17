@@ -1,5 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { AsciiLily } from "@/components/AsciiLily";
+import { HoverWord } from "@/components/HoverWord";
+import { playPop } from "@/lib/pop-sound";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -23,19 +26,47 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
+const CODE_LINKS = [
+  { label: "github profile", sub: "all of it", href: "https://github.com/yourusername" },
+  { label: "project one", sub: "repo", href: "https://github.com/yourusername/project-one" },
+  { label: "project two", sub: "repo", href: "https://github.com/yourusername/project-two" },
+];
+
+const MUSIC_LINKS = [
+  { label: "soundcloud", sub: "tuesdays", href: "https://soundcloud.com/yourusername" },
+];
+
+const BRAIN_LINKS = [
+  { label: "leetcode", sub: "brain usage", href: "https://leetcode.com/yourusername" },
+];
+
 function Index() {
+  useEffect(() => {
+    const onDown = () => playPop();
+    window.addEventListener("pointerdown", onDown);
+    return () => window.removeEventListener("pointerdown", onDown);
+  }, []);
+
   return (
-    <main className="grid h-screen w-screen grid-cols-1 overflow-hidden bg-background md:grid-cols-2">
+    <main className="relative grid h-screen w-screen grid-cols-1 overflow-hidden bg-background md:grid-cols-2">
+      {/* faint drifting pink glow */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="drift-a absolute -left-1/4 top-1/4 h-[60vmax] w-[60vmax] rounded-full bg-primary/10 blur-[120px]" />
+        <div className="drift-b absolute -right-1/4 bottom-0 h-[50vmax] w-[50vmax] rounded-full bg-primary/15 blur-[140px]" />
+      </div>
+
       <section className="z-10 flex flex-col justify-center px-8 py-10 md:px-14">
         <h1 className="font-display text-[clamp(2.4rem,5.4vw,4.6rem)] leading-[1.0] text-foreground">
           i'm shivansh.
-          <span className="mt-2 block italic text-primary">i code sometimes.</span>
+          <span className="mt-2 block italic">
+            i <HoverWord word="code" title="things i've built" links={CODE_LINKS} /> sometimes.
+          </span>
         </h1>
 
         <p className="mt-7 max-w-md text-[clamp(1rem,1.45vw,1.3rem)] leading-[1.6] text-muted-foreground">
-          i make music on tuesdays
+          i make <HoverWord word="music" title="tuesday output" links={MUSIC_LINKS} /> on tuesdays
           <br />
-          and i try to use my brain often.
+          and i try to use my <HoverWord word="brain" title="proof of brain" links={BRAIN_LINKS} /> often.
         </p>
 
         <a
