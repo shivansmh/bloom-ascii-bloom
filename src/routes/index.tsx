@@ -90,7 +90,7 @@ function Index() {
             i make <HoverWord word="music" title="tuesday output" links={MUSIC_LINKS} /> on tuesdays
           </span>
           <span className="block">
-            and i try to use my <HoverWord word="brain" title="proof of brain" links={BRAIN_LINKS} /> often.
+            and i try to use my <HoverWord word="brain" title="proof of brain" links={BRAIN_LINKS} /> often
           </span>
           <span className="block">
             <NowPlaying soundEnabled={sound} />
@@ -98,7 +98,7 @@ function Index() {
         </h1>
 
         <a
-          href="mailto:hello@example.com"
+          href="mailto:work4shivansh@gmail.com"
           className="mt-9 inline-flex w-fit items-center gap-3 border-b border-primary/40 pb-1 font-mono text-[clamp(0.85rem,1.05vw,1rem)] tracking-[0.2em] text-primary transition-colors duration-300 hover:border-primary"
         >
           say hello.
