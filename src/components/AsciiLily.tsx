@@ -77,7 +77,7 @@ export function AsciiLily() {
           const ch = CHARS[Math.min(CHARS.length - 1, Math.floor(v * CHARS.length))];
           ctx.globalAlpha = 0.35 + v * 0.65;
           ctx.fillStyle = push > 0.15 || Math.hypot(nx, ny + 0.1) < 0.22 ? accent : fg;
-          ctx.fillText(ch, px, py);
+          ctx.fillText(ch ?? ".", px, py);
         }
       }
       raf = requestAnimationFrame(draw);
