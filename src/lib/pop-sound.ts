@@ -1,6 +1,7 @@
 let ctx: AudioContext | null = null;
 
-export function playPop() {
+export function playPop(enabled = true) {
+  if (!enabled) return;
   try {
     ctx ??= new AudioContext();
     if (ctx.state === "suspended") void ctx.resume();

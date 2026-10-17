@@ -5,6 +5,8 @@ import { GithubCard } from "@/components/GithubCard";
 import { HoverWord } from "@/components/HoverWord";
 import { NowPlaying } from "@/components/NowPlaying";
 import { playPop } from "@/lib/pop-sound";
+import { Button } from "@/components/ui/button";
+import { Volume2, VolumeX } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -37,37 +39,20 @@ const BRAIN_LINKS = [
 ];
 
 function CodeHover() {
-  const [open, setOpen] = useState(false);
   return (
-    <span
-      className="relative inline-block"
-      onPointerEnter={() => setOpen(true)}
-      onPointerLeave={() => setOpen(false)}
-    >
-      <span className="cursor-pointer border-b border-dashed border-primary/60 text-primary transition-colors duration-300 hover:border-primary">
-        code
-      </span>
-      <span
-        className={`absolute bottom-full left-0 z-50 mb-3 origin-bottom-left transition-all duration-300 ${
-          open
-            ? "pointer-events-auto translate-y-0 scale-100 opacity-100"
-            : "pointer-events-none translate-y-2 scale-95 opacity-0"
-        }`}
-      >
-        <GithubCard />
-      </span>
-    </span>
+    <HoverWord word="code"><GithubCard /></HoverWord>
   );
 }
 
 function Index() {
   const [light, setLight] = useState(false);
+  const [sound, setSound] = useState(true);
 
   useEffect(() => {
-    const onDown = () => playPop();
+    const onDown = () => playPop(sound);
     window.addEventListener("pointerdown", onDown);
     return () => window.removeEventListener("pointerdown", onDown);
-  }, []);
+  }, [sound]);
 
   useEffect(() => {
     document.documentElement.classList.toggle("light", light);
@@ -82,12 +67,18 @@ function Index() {
         <div className="drift-gold absolute left-1/3 top-1/2 h-[40vmax] w-[40vmax] rounded-full bg-[oklch(0.8_0.12_85)] blur-[130px]" />
       </div>
 
-      <button
+      <div className="absolute right-6 top-6 z-20 flex items-center gap-5">
+      <Button variant="link" size="sm" onClick={() => setSound((value) => !value)} aria-label={sound ? "turn sound off" : "turn sound on"} aria-pressed={sound}
+        className="h-auto rounded-none border-b border-dashed border-primary/60 p-0 pb-0.5 font-mono text-xs tracking-[0.2em] text-primary no-underline hover:no-underline">
+        {sound ? <Volume2 /> : <VolumeX />} {sound ? "sound off" : "sound on"}
+      </Button>
+      <Button variant="link" size="sm"
         onClick={() => setLight((v) => !v)}
-        className="absolute right-6 top-6 z-20 cursor-pointer border-b border-dashed border-primary/60 pb-0.5 font-mono text-xs tracking-[0.2em] text-primary transition-colors duration-300 hover:border-primary"
+        className="h-auto rounded-none border-b border-dashed border-primary/60 p-0 pb-0.5 font-mono text-xs tracking-[0.2em] text-primary no-underline hover:border-primary hover:no-underline"
       >
         {light ? "lights off" : "lights on"}
-      </button>
+      </Button>
+      </div>
 
       <section className="z-10 flex flex-col justify-center px-8 py-10 md:px-14">
         <h1 className="font-display text-[clamp(1.9rem,3.6vw,3.2rem)] leading-[1.25] text-foreground">
@@ -102,7 +93,7 @@ function Index() {
             and i try to use my <HoverWord word="brain" title="proof of brain" links={BRAIN_LINKS} /> often.
           </span>
           <span className="block">
-            <NowPlaying />
+            <NowPlaying soundEnabled={sound} />
           </span>
         </h1>
 
