@@ -27,8 +27,8 @@ export function GithubCard() {
   }, []);
 
   return (
-    <span className="block w-72 rounded-lg border border-border bg-card/90 p-4 shadow-[0_12px_40px_-12px_var(--color-primary)] backdrop-blur-md">
-      <span className="mb-3 block w-fit rounded-full border border-primary/50 px-2 py-0.5 font-mono text-[0.55rem] uppercase tracking-[0.25em] text-primary">
+    <span className="block w-72 rounded-lg border border-gold/30 bg-card/90 p-4 shadow-[0_12px_40px_-12px_var(--color-gold)] backdrop-blur-md">
+      <span className="mb-3 block w-fit rounded-full border border-gold/45 px-2 py-0.5 font-mono text-[0.55rem] uppercase tracking-[0.25em] text-gold">
         lately
       </span>
 
@@ -63,7 +63,7 @@ export function GithubCard() {
       )}
 
       {days && days.length > 0 && (
-        <span className="mt-3 block border-t border-border pt-3">
+        <span className="mt-3 block border-t border-gold/20 pt-3">
           <span
             className="grid gap-[2px]"
             style={{ gridTemplateRows: "repeat(7, 1fr)", gridAutoFlow: "column" }}

@@ -24,7 +24,7 @@ GITHUB_PAGES=true bun run build
 
 - **Lily:** drawn on a canvas with procedural petal math; pointer movement pushes the characters outward.
 - **Rain:** a second canvas animates randomized punctuation with `requestAnimationFrame`; switching it off clears the canvas and stops the loop.
-- **Now Playing:** Last.fm supplies the track, Apple’s public search API finds a matching preview, and the Web Audio API plays it with an AAC decoder fallback.
+- **Now Playing:** shows only Last.fm tracks marked as currently playing, uses Last.fm/Apple artwork, and plays a matching Apple preview with Web Audio.
 - **Hover cards:** built on Radix UI. Theme colors come from CSS variables and change with the light toggle.
 
 ## Main files

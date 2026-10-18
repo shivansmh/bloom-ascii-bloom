@@ -43,7 +43,7 @@ describe("song preview player", () => {
       arrayBuffer: async () => new ArrayBuffer(1),
     }));
 
-    const player = new PreviewPlayer("https://example.com/preview.m4a", () => {});
+    const player = new PreviewPlayer("https://example.com/preview.m4a");
 
     expect(await player.play()).toBe(true);
     expect(context.sources[0].loop).toBe(true);

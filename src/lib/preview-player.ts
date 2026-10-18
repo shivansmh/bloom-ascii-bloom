@@ -8,7 +8,7 @@ export class PreviewPlayer {
   private controller = new AbortController();
   private generation = 0;
 
-  constructor(private url: string, private onEnded: () => void) {}
+  constructor(private url: string) {}
 
   async play() {
     const generation = ++this.generation;
@@ -35,12 +35,6 @@ export class PreviewPlayer {
     source.buffer = this.buffer;
     source.loop = true;
     source.connect(this.context.destination);
-    source.onended = () => {
-      if (this.source !== source) return;
-      this.source = null;
-      this.offset = 0;
-      this.onEnded();
-    };
     this.source = source;
     this.startedAt = this.context.currentTime;
     source.start(0, this.offset);

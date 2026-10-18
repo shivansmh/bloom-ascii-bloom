@@ -73,11 +73,11 @@ function Index() {
 
       <div className="absolute right-6 top-6 z-20 flex items-center gap-4">
         <Button variant="link" size="sm" onClick={() => setSound((value) => !value)} aria-label={sound ? "turn sound off" : "turn sound on"} aria-pressed={sound}
-          className="h-auto rounded-none border-b border-dashed border-primary/60 p-0 pb-0.5 font-mono text-xs tracking-[0.2em] text-primary no-underline hover:no-underline">
+          className="h-auto rounded-none border-b border-dashed border-gold/40 p-0 pb-0.5 font-mono text-xs tracking-[0.2em] text-primary no-underline hover:border-gold hover:no-underline">
           {sound ? <Volume2 /> : <VolumeX />} {sound ? "sound off" : "sound on"}
         </Button>
         <Button variant="link" size="sm" onClick={() => setRain((value) => !value)} aria-label={rain ? "turn rain off" : "turn rain on"} aria-pressed={rain}
-          className="h-auto rounded-none border-b border-dashed border-primary/60 p-0 pb-0.5 font-mono text-xs tracking-[0.2em] text-primary no-underline hover:border-primary hover:no-underline">
+          className="h-auto rounded-none border-b border-dashed border-gold/40 p-0 pb-0.5 font-mono text-xs tracking-[0.2em] text-primary no-underline hover:border-gold hover:no-underline">
           rain: {rain ? "on" : "off"}
         </Button>
         <Button variant="link" size="sm"
@@ -88,7 +88,7 @@ function Index() {
           }}
           aria-label={light ? "turn lights off" : "turn lights on"}
           aria-pressed={light}
-          className="h-auto rounded-none border-b border-dashed border-primary/60 p-0 pb-0.5 font-mono text-xs tracking-[0.2em] text-primary no-underline hover:border-primary hover:no-underline"
+          className="h-auto rounded-none border-b border-dashed border-gold/40 p-0 pb-0.5 font-mono text-xs tracking-[0.2em] text-primary no-underline hover:border-gold hover:no-underline"
         >
           {light ? "lights off" : "lights on"}
         </Button>
@@ -113,7 +113,7 @@ function Index() {
 
         <a
           href="mailto:work4shivansh@gmail.com"
-          className="mt-9 inline-flex w-fit items-center gap-3 border-b border-primary/40 pb-1 font-mono text-[clamp(0.85rem,1.05vw,1rem)] tracking-[0.2em] text-primary transition-colors duration-300 hover:border-primary"
+          className="mt-9 inline-flex w-fit items-center gap-3 border-b border-gold/35 pb-1 font-mono text-[clamp(0.85rem,1.05vw,1rem)] tracking-[0.2em] text-primary transition-colors duration-300 hover:border-gold"
         >
           say hello.
           <span aria-hidden className="text-xs">

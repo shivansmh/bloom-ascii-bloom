@@ -26,13 +26,13 @@ export function HoverWord({
           onClick={(event) => { event.preventDefault(); setOpen(!open); onOpenChange?.(!open); }}
           onFocus={() => { setOpen(true); onOpenChange?.(true); }}
           onKeyDown={(event) => { if (event.key === "Escape") { setOpen(false); onOpenChange?.(false); } }}
-          className="cursor-pointer border-b border-dashed border-primary/60 text-primary transition-colors duration-300 hover:border-primary">
+          className="cursor-pointer border-b border-dashed border-gold/50 text-primary transition-colors duration-300 hover:border-gold">
           {word}
         </a>
       </HoverCardTrigger>
       <Portal>
         <HoverCardContent side="top" align="start" sideOffset={10} collisionPadding={16}
-          className={children ? "w-auto border-0 bg-transparent p-0 shadow-none" : "border-border bg-card p-3 text-foreground"}>
+          className={children ? "w-auto border-0 bg-transparent p-0 shadow-none" : "border-gold/30 bg-card p-3 text-foreground"}>
           {children ?? <>
           <span className="mb-2 block font-mono text-[0.6rem] uppercase tracking-[0.25em] text-muted-foreground">{title}</span>
           {links?.map((l) => (

@@ -36,6 +36,7 @@
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
+  --color-gold: var(--gold);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
@@ -70,6 +71,7 @@
   --foreground: oklch(0.93 0.01 80);
   --lily: oklch(0.9 0.015 80);
   --lily-accent: oklch(0.78 0.08 10);
+  --gold: oklch(0.78 0.12 82);
   --card: oklch(0.19 0.005 60);
   --card-foreground: var(--foreground);
   --popover: var(--card);
@@ -190,6 +192,7 @@
   --foreground: oklch(0.2 0.01 60);
   --lily: oklch(0.28 0.02 60);
   --lily-accent: oklch(0.55 0.13 10);
+  --gold: oklch(0.62 0.14 78);
   --card: oklch(0.99 0.004 80);
   --card-foreground: oklch(0.2 0.01 60);
   --popover: oklch(0.99 0.004 80);
