@@ -1,17 +1,36 @@
-export const RAIN_INTERVAL_MS = 30_000;
-export const RAIN_DURATION_MS = 5_000;
-export const RAIN_RETRACTION_MS = 900;
+export const RAIN_GLYPHS = [
+  "|", "/", "\\", "~", ":", ";", ".", "'", "`", "+", "*", "#", "%", "&",
+  "?", "!", "^", "_", "-", "=", "<", ">", "x", "o", "0", "1",
+] as const;
 
-export function getRainState(elapsed: number) {
-  const cycle = elapsed % RAIN_INTERVAL_MS;
-  if (elapsed < RAIN_INTERVAL_MS || cycle >= RAIN_DURATION_MS + RAIN_RETRACTION_MS) {
-    return { phase: "idle" as const, progress: 0 };
-  }
-  if (cycle < RAIN_DURATION_MS) {
-    return { phase: "raining" as const, progress: cycle / RAIN_DURATION_MS };
-  }
-  return {
-    phase: "retracting" as const,
-    progress: (cycle - RAIN_DURATION_MS) / RAIN_RETRACTION_MS,
-  };
+export type RainDrop = {
+  x: number;
+  phase: number;
+  speed: number;
+  drift: number;
+  glyph: (typeof RAIN_GLYPHS)[number];
+  opacity: number;
+};
+
+export function createRainDrops(
+  count: number,
+  random: () => number = Math.random,
+): RainDrop[] {
+  const total = Math.max(0, Math.floor(count));
+
+  return Array.from({ length: total }, (_, index) => {
+    const glyphIndex = Math.min(
+      RAIN_GLYPHS.length - 1,
+      Math.floor(random() * RAIN_GLYPHS.length),
+    );
+
+    return {
+      x: (index + 0.5) / Math.max(1, total),
+      phase: random(),
+      speed: 50 + random() * 70,
+      drift: random() * Math.PI * 2,
+      glyph: RAIN_GLYPHS[glyphIndex] ?? "|",
+      opacity: 0.12 + random() * 0.16,
+    };
+  });
 }

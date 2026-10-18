@@ -1,14 +1,13 @@
 import { useEffect, useRef } from "react";
-import { getRainState, RAIN_DURATION_MS } from "@/lib/ascii-rain";
+import { createRainDrops } from "@/lib/ascii-rain";
 
 const CLOUD = [
   "       .--.       ",
   "   .-(    ).-.    ",
   "  (___.__)___)   ",
 ];
-const GLYPHS = ["|", ":", ".", "'", "|"];
 
-export function AsciiRain() {
+export function AsciiRain({ enabled }: { enabled: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -16,11 +15,20 @@ export function AsciiRain() {
     const ctx = canvas?.getContext("2d");
     if (!canvas || !ctx) return;
 
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!enabled || prefersReducedMotion) {
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      canvas.dataset.phase = "idle";
+      return;
+    }
+
     let width = 0;
     let height = 0;
     let frame = 0;
+    let drops = createRainDrops(0);
     const started = performance.now();
+
     const resize = () => {
       width = canvas.clientWidth;
       height = canvas.clientHeight;
@@ -28,59 +36,50 @@ export function AsciiRain() {
       canvas.width = width * dpr;
       canvas.height = height * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      drops = createRainDrops(Math.ceil(width / 18));
     };
+
     const observer = new ResizeObserver(resize);
     observer.observe(canvas);
     resize();
 
     function draw(now: number) {
-      if (!ctx || !canvas) return;
       ctx.clearRect(0, 0, width, height);
-      const state = getRainState(now - started);
-      canvas.dataset['phase'] = reducedMotion.matches ? "idle" : state.phase;
-      if (!reducedMotion.matches && state.phase !== "idle") {
-        const tokens = getComputedStyle(document.documentElement);
-        const retreat = state.phase === "retracting" ? state.progress : 0;
-        const entrance = state.phase === "raining" ? Math.min(state.progress * 20, 1) : 1;
-        const rise = retreat * retreat * (height + 60);
-        ctx.font = `11px ${tokens.getPropertyValue("--font-mono")}`;
-        ctx.textBaseline = "top";
-        ctx.fillStyle = tokens.getPropertyValue("--primary").trim();
-        ctx.globalAlpha = 0.55 * entrance * (1 - retreat);
+      canvas.dataset.phase = "raining";
 
-        const clouds = Math.max(3, Math.ceil(width / 155));
-        for (let i = 0; i < clouds; i++) {
-          const x = (i + 0.5) * width / clouds - 58;
-          CLOUD.forEach((line, row) => {
-            ctx.fillText(line, x, -15 + row * 12 - (1 - entrance) * 25 - retreat * 45);
-          });
-        }
+      const tokens = getComputedStyle(document.documentElement);
+      ctx.font = `11px ${tokens.getPropertyValue("--font-mono")}`;
+      ctx.textBaseline = "top";
+      ctx.fillStyle = tokens.getPropertyValue("--primary").trim() || "#c66";
 
-        const rainTime = state.phase === "raining" ? state.progress * RAIN_DURATION_MS : RAIN_DURATION_MS;
-        const drops = Math.ceil(width / 12);
-        for (let i = 0; i < drops; i++) {
-          const seed = (i * 137.508) % 997;
-          const delay = seed % 850;
-          const age = rainTime - delay;
-          if (age < 0) continue;
-          const speed = 0.18 + (seed % 100) / 700;
-          const y = ((age * speed) % (height + 90)) - 45 - rise;
-          const x = (i + 0.5) * width / drops + Math.sin(age / 900 + i) * 5;
-          ctx.globalAlpha = (0.18 + (seed % 10) / 40) * entrance * (1 - retreat);
-          ctx.fillText(GLYPHS[i % GLYPHS.length] ?? "|", x, y);
-          ctx.globalAlpha *= 0.35;
-          ctx.fillText(".", x, y - 17);
-        }
-        ctx.globalAlpha = 1;
+      const clouds = Math.max(3, Math.ceil(width / 280));
+      ctx.globalAlpha = 0.2;
+      for (let i = 0; i < clouds; i++) {
+        const x = ((i + 0.5) * width) / clouds - 58;
+        CLOUD.forEach((line, row) => ctx.fillText(line, x, -15 + row * 12));
       }
+
+      const elapsed = (now - started) / 1000;
+      const travel = height + 80;
+      for (const drop of drops) {
+        const x = drop.x * width + Math.sin(elapsed * 0.8 + drop.drift) * 5;
+        const y = ((drop.phase * travel + elapsed * drop.speed) % travel) - 40;
+        ctx.globalAlpha = drop.opacity;
+        ctx.fillText(drop.glyph, x, y);
+        ctx.globalAlpha = drop.opacity * 0.3;
+        ctx.fillText(drop.glyph, x, y - 15);
+      }
+
+      ctx.globalAlpha = 1;
       frame = requestAnimationFrame(draw);
     }
+
     frame = requestAnimationFrame(draw);
     return () => {
       cancelAnimationFrame(frame);
       observer.disconnect();
     };
-  }, []);
+  }, [enabled]);
 
   return <canvas ref={canvasRef} aria-hidden="true" className="pointer-events-none absolute inset-0 z-[5] h-full w-full" />;
 }

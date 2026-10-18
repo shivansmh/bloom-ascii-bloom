@@ -48,6 +48,7 @@ function CodeHover() {
 function Index() {
   const [light, setLight] = useState(false);
   const [sound, setSound] = useState(true);
+  const [rain, setRain] = useState(true);
 
   useEffect(() => {
     const onDown = () => playPop(sound);
@@ -68,19 +69,29 @@ function Index() {
         <div className="drift-gold absolute left-1/3 top-1/2 h-[40vmax] w-[40vmax] rounded-full bg-[oklch(0.8_0.12_85)] blur-[130px]" />
       </div>
 
-      <AsciiRain />
+      <AsciiRain enabled={rain} />
 
-      <div className="absolute right-6 top-6 z-20 flex items-center gap-5">
-      <Button variant="link" size="sm" onClick={() => setSound((value) => !value)} aria-label={sound ? "turn sound off" : "turn sound on"} aria-pressed={sound}
-        className="h-auto rounded-none border-b border-dashed border-primary/60 p-0 pb-0.5 font-mono text-xs tracking-[0.2em] text-primary no-underline hover:no-underline">
-        {sound ? <Volume2 /> : <VolumeX />} {sound ? "sound off" : "sound on"}
-      </Button>
-      <Button variant="link" size="sm"
-        onClick={() => setLight((v) => !v)}
-        className="h-auto rounded-none border-b border-dashed border-primary/60 p-0 pb-0.5 font-mono text-xs tracking-[0.2em] text-primary no-underline hover:border-primary hover:no-underline"
-      >
-        {light ? "lights off" : "lights on"}
-      </Button>
+      <div className="absolute right-6 top-6 z-20 flex items-center gap-4">
+        <Button variant="link" size="sm" onClick={() => setSound((value) => !value)} aria-label={sound ? "turn sound off" : "turn sound on"} aria-pressed={sound}
+          className="h-auto rounded-none border-b border-dashed border-primary/60 p-0 pb-0.5 font-mono text-xs tracking-[0.2em] text-primary no-underline hover:no-underline">
+          {sound ? <Volume2 /> : <VolumeX />} {sound ? "sound off" : "sound on"}
+        </Button>
+        <Button variant="link" size="sm" onClick={() => setRain((value) => !value)} aria-label={rain ? "turn rain off" : "turn rain on"} aria-pressed={rain}
+          className="h-auto rounded-none border-b border-dashed border-primary/60 p-0 pb-0.5 font-mono text-xs tracking-[0.2em] text-primary no-underline hover:border-primary hover:no-underline">
+          rain: {rain ? "on" : "off"}
+        </Button>
+        <Button variant="link" size="sm"
+          onClick={() => {
+            const next = !light;
+            document.documentElement.classList.toggle("light", next);
+            setLight(next);
+          }}
+          aria-label={light ? "turn lights off" : "turn lights on"}
+          aria-pressed={light}
+          className="h-auto rounded-none border-b border-dashed border-primary/60 p-0 pb-0.5 font-mono text-xs tracking-[0.2em] text-primary no-underline hover:border-primary hover:no-underline"
+        >
+          {light ? "lights off" : "lights on"}
+        </Button>
       </div>
 
       <section className="z-10 flex flex-col justify-center px-8 py-10 md:px-14">
