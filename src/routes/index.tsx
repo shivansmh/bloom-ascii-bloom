@@ -14,13 +14,13 @@ import { getWindStrength, WIND_DURATION_MS } from "@/lib/wind";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Shivansh — i code sometimes" },
+      { title: "Shivansh's portfolio" },
       {
         name: "description",
         content:
           "i'm shivansh. i code sometimes. i make music on tuesdays and i try to use my brain often.",
       },
-      { property: "og:title", content: "Shivansh" },
+      { property: "og:title", content: "Shivansh's portfolio" },
       {
         property: "og:description",
         content:
