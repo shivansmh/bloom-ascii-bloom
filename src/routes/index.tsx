@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { AsciiLily } from "@/components/AsciiLily";
 import { AsciiRain } from "@/components/AsciiRain";
+import { WindStreaks } from "@/components/WindStreaks";
 import { GithubCard } from "@/components/GithubCard";
 import { HoverWord } from "@/components/HoverWord";
 import { NowPlaying } from "@/components/NowPlaying";
@@ -89,6 +90,7 @@ function Index() {
       </div>
 
       <AsciiRain enabled={rain} />
+      <WindStreaks />
 
       <div className="absolute right-6 top-6 z-20 flex items-center gap-4">
         <Button variant="link" size="sm" onClick={() => setSound((value) => !value)} aria-label={sound ? "turn sound off" : "turn sound on"} aria-pressed={sound}

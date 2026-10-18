@@ -89,7 +89,10 @@ export function AsciiLily() {
           const nx = (i * cw - w / 2) / scale;
           const ny = (j * cell - h / 2) / scale;
           const heightFactor = clamp((1 - ny) / 1.65, 0, 1);
-          const bentX = nx - wind * 0.24 * heightFactor * heightFactor;
+          const hf2 = heightFactor * heightFactor;
+          // struggle: fast flutter + slower sway, both scaled by wind so it settles cleanly
+          const struggle = wind * (Math.sin(t * 7.3 + ny * 2.2) * 0.045 + Math.sin(t * 13.1 + ny * 4) * 0.018);
+          const bentX = nx - (wind * 0.26 + struggle) * hf2;
           const v = lily(bentX, ny, t);
           if (v < 0.05) continue;
 
