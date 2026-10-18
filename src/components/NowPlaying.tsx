@@ -93,7 +93,7 @@ export function NowPlaying({ soundEnabled = true }: { soundEnabled?: boolean }) 
       im playing{" "}
       {track ? (
         <>
-        <HoverWord word={<span className="italic">{track.name}</span>} onOpenChange={(open) => { if (!open) pause(); }}>
+        <HoverWord word={<span className="italic">{track.name}</span>}>
           <div className="relative w-72 max-w-[calc(100vw-32px)] rounded-lg border border-border bg-card p-4 text-foreground">
             <span className="absolute -top-2.5 left-4 rounded-full border border-primary/40 bg-card px-2 font-mono text-[0.6rem] tracking-[0.2em] text-primary">
               {track.nowPlaying ? "NOW PLAYING" : "LAST PLAYED"}

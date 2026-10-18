@@ -33,6 +33,7 @@ export class PreviewPlayer {
     if (this.controller.signal.aborted || generation !== this.generation) return false;
     const source = this.context.createBufferSource();
     source.buffer = this.buffer;
+    source.loop = true;
     source.connect(this.context.destination);
     source.onended = () => {
       if (this.source !== source) return;
@@ -51,7 +52,8 @@ export class PreviewPlayer {
     const source = this.source;
     this.source = null;
     if (source) {
-      this.offset += this.context.currentTime - this.startedAt;
+      const duration = this.buffer?.duration ?? 0;
+      if (duration > 0) this.offset = (this.offset + this.context.currentTime - this.startedAt) % duration;
       source.onended = null;
       source.stop();
       source.disconnect();
