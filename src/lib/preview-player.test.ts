@@ -46,16 +46,16 @@ describe("song preview player", () => {
     const player = new PreviewPlayer("https://example.com/preview.m4a");
 
     expect(await player.play()).toBe(true);
-    expect(context.sources[0].loop).toBe(true);
-    expect(context.sources[0].start).toHaveBeenCalledWith(0, 0);
+    expect(context.sources[0]!.loop).toBe(true);
+    expect(context.sources[0]!.start).toHaveBeenCalledWith(0, 0);
 
     context.currentTime = 12.5;
     player.pause();
-    expect(context.sources[0].stop).toHaveBeenCalledOnce();
+    expect(context.sources[0]!.stop).toHaveBeenCalledOnce();
 
     expect(await player.play()).toBe(true);
-    expect(context.sources[1].loop).toBe(true);
-    expect(context.sources[1].start).toHaveBeenCalledWith(0, 2.5);
+    expect(context.sources[1]!.loop).toBe(true);
+    expect(context.sources[1]!.start).toHaveBeenCalledWith(0, 2.5);
 
     player.dispose();
   });

@@ -2,17 +2,17 @@ import { useEffect, useRef, useState } from "react";
 import { Pause, Play, RotateCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HoverWord } from "@/components/HoverWord";
-import { fetchCurrentTrack, type CurrentTrack } from "@/lib/lastfm";
+import { fetchLatestTrack, type LastFmTrack } from "@/lib/lastfm";
 import { findSongPreview, type PreviewResult } from "@/lib/song-preview";
 import { PreviewPlayer } from "@/lib/preview-player";
 
 const LASTFM_USER = "blizzard_xd";
 const LASTFM_API_KEY = "f19482ccb877fec38d12746ec5857ff1";
 
-type FeedStatus = "loading" | "playing" | "idle" | "unavailable";
+type FeedStatus = "loading" | "playing" | "lastPlayed" | "idle" | "unavailable";
 
 export function NowPlaying({ soundEnabled = true }: { soundEnabled?: boolean }) {
-  const [track, setTrack] = useState<CurrentTrack | null>(null);
+  const [track, setTrack] = useState<LastFmTrack | null>(null);
   const [feedStatus, setFeedStatus] = useState<FeedStatus>("loading");
   const [preview, setPreview] = useState<PreviewResult | null>(null);
   const [previewLoading, setPreviewLoading] = useState(false);
@@ -31,10 +31,10 @@ export function NowPlaying({ soundEnabled = true }: { soundEnabled?: boolean }) 
       const currentRequest = new AbortController();
       request = currentRequest;
       try {
-        const liveTrack = await fetchCurrentTrack(LASTFM_USER, LASTFM_API_KEY, currentRequest.signal);
+        const latestTrack = await fetchLatestTrack(LASTFM_USER, LASTFM_API_KEY, currentRequest.signal);
         if (disposed) return;
-        setTrack(liveTrack);
-        setFeedStatus(liveTrack ? "playing" : "idle");
+        setTrack(latestTrack);
+        setFeedStatus(latestTrack ? latestTrack.nowPlaying ? "playing" : "lastPlayed" : "idle");
       } catch {
         if (disposed || currentRequest.signal.aborted) return;
         setTrack(null);
@@ -120,11 +120,11 @@ export function NowPlaying({ soundEnabled = true }: { soundEnabled?: boolean }) 
     <>
       {track ? (
         <>
-          im playing{" "}
+          {track.nowPlaying ? "im playing" : "last played"}{" "}
           <HoverWord word={<span className="italic">{track.name}</span>}>
             <div className="relative w-72 max-w-[calc(100vw-32px)] rounded-lg border border-gold/35 bg-card p-4 text-foreground shadow-[0_12px_32px_-16px_var(--color-gold)]">
               <span className="absolute -top-2.5 left-4 rounded-full border border-gold/50 bg-card px-2 font-mono text-[0.6rem] tracking-[0.2em] text-gold">
-                NOW PLAYING
+                {track.nowPlaying ? "NOW PLAYING" : "LAST PLAYED"}
               </span>
               <div className="flex items-center gap-3">
                 <Button variant="outline" size="icon" aria-label={playing ? "pause song preview" : "play song preview"}

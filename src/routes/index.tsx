@@ -8,6 +8,7 @@ import { NowPlaying } from "@/components/NowPlaying";
 import { playPop } from "@/lib/pop-sound";
 import { Button } from "@/components/ui/button";
 import { Volume2, VolumeX } from "lucide-react";
+import { getWindStrength, WIND_DURATION_MS } from "@/lib/wind";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -59,6 +60,24 @@ function Index() {
   useEffect(() => {
     document.documentElement.classList.toggle("light", light);
   }, [light]);
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const root = document.documentElement;
+    const started = performance.now();
+    let frame = 0;
+    const animate = (now: number) => {
+      const elapsed = now - started;
+      root.style.setProperty("--wind-progress", getWindStrength(elapsed).toFixed(3));
+      if (elapsed < WIND_DURATION_MS) frame = requestAnimationFrame(animate);
+      else root.style.removeProperty("--wind-progress");
+    };
+    frame = requestAnimationFrame(animate);
+    return () => {
+      cancelAnimationFrame(frame);
+      root.style.removeProperty("--wind-progress");
+    };
+  }, []);
 
   return (
     <main className="relative grid h-screen w-screen grid-cols-1 overflow-hidden bg-background md:grid-cols-2">
@@ -115,7 +134,7 @@ function Index() {
           href="mailto:work4shivansh@gmail.com"
           className="mt-9 inline-flex w-fit items-center gap-3 border-b border-gold/35 pb-1 font-mono text-[clamp(0.85rem,1.05vw,1rem)] tracking-[0.2em] text-primary transition-colors duration-300 hover:border-gold"
         >
-          say hello.
+          say hello
           <span aria-hidden className="text-xs">
             &#8594;
           </span>

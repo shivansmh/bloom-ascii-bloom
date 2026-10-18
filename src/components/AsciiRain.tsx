@@ -5,15 +5,18 @@ export function AsciiRain({ enabled }: { enabled: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas?.getContext("2d");
-    if (!canvas || !ctx) return;
+    const canvasRefValue = canvasRef.current;
+    if (!canvasRefValue) return;
+    const context = canvasRefValue.getContext("2d");
+    if (!context) return;
+    const canvas: HTMLCanvasElement = canvasRefValue;
+    const ctx: CanvasRenderingContext2D = context;
 
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!enabled || prefersReducedMotion) {
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      canvas.dataset.phase = "idle";
+      canvas.dataset["phase"] = "idle";
       return;
     }
 
@@ -39,7 +42,7 @@ export function AsciiRain({ enabled }: { enabled: boolean }) {
 
     function draw(now: number) {
       ctx.clearRect(0, 0, width, height);
-      canvas.dataset.phase = "raining";
+      canvas.dataset["phase"] = "raining";
 
       const tokens = getComputedStyle(document.documentElement);
       ctx.font = `11px ${tokens.getPropertyValue("--font-mono")}`;
@@ -48,9 +51,11 @@ export function AsciiRain({ enabled }: { enabled: boolean }) {
 
       const elapsed = (now - started) / 1000;
       const travel = height + 80;
+      const wind = Math.max(0, Math.min(1, Number(document.documentElement.style.getPropertyValue("--wind-progress")) || 0));
       for (const drop of drops) {
-        const x = drop.x * width + Math.sin(elapsed * 0.8 + drop.drift) * 5;
-        const y = ((drop.phase * travel + elapsed * drop.speed) % travel) - 40;
+        const fall = (drop.phase * travel + elapsed * drop.speed) % travel;
+        const x = drop.x * width + Math.sin(elapsed * 0.8 + drop.drift) * 5 + wind * fall * 0.11;
+        const y = fall - 40;
         ctx.globalAlpha = drop.opacity;
         ctx.fillText(drop.glyph, x, y);
         ctx.globalAlpha = drop.opacity * 0.3;

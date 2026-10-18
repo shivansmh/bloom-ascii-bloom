@@ -14,46 +14,50 @@ type LastFmResponse = {
   recenttracks?: { track?: LastFmTrackResponse | LastFmTrackResponse[] };
 };
 
-export type CurrentTrack = {
+export type LastFmTrack = {
   name: string;
   artist: string;
   url: string;
   artworkUrl?: string;
+  nowPlaying: boolean;
 };
 
-export function parseCurrentTrack(payload: unknown, user: string): CurrentTrack | null {
+export function parseRecentTrack(payload: unknown, user: string): LastFmTrack | null {
   const response = payload as LastFmResponse | null;
   const rawTracks = response?.recenttracks?.track;
   const tracks = Array.isArray(rawTracks) ? rawTracks : rawTracks ? [rawTracks] : [];
-  const current = tracks.find((track) => track?.["@attr"]?.nowplaying === "true");
-  if (!current) return null;
+  const liveTrack = tracks.find((track) => track?.["@attr"]?.nowplaying === "true");
+  const selected = liveTrack ?? tracks[0];
+  if (!selected) return null;
 
-  const name = current.name?.trim() ?? "";
-  const artistValue = current.artist;
+  const name = selected.name?.trim() ?? "";
+  const artistValue = selected.artist;
   const artist = (typeof artistValue === "string"
     ? artistValue
     : artistValue?.["#text"] ?? artistValue?.name ?? "").trim();
   if (!name || !artist) return null;
 
-  const images = Array.isArray(current.image) ? current.image : [];
+  const images = Array.isArray(selected.image) ? selected.image : [];
   const artworkUrl = ["extralarge", "large", "medium", "small"]
     .map((size) => images.find((image) => image.size === size && image["#text"]?.trim())?.["#text"])
     .find((url): url is string => Boolean(url))
     ?? images.find((image) => image["#text"]?.trim())?.["#text"];
 
-  return {
+  const result: LastFmTrack = {
     name,
     artist,
-    url: current.url?.trim() || `https://www.last.fm/user/${encodeURIComponent(user)}`,
-    artworkUrl,
+    url: selected.url?.trim() || `https://www.last.fm/user/${encodeURIComponent(user)}`,
+    nowPlaying: selected === liveTrack,
   };
+  if (artworkUrl) result.artworkUrl = artworkUrl;
+  return result;
 }
 
-export async function fetchCurrentTrack(
+export async function fetchLatestTrack(
   user: string,
   apiKey: string,
   signal: AbortSignal,
-): Promise<CurrentTrack | null> {
+): Promise<LastFmTrack | null> {
   const params = new URLSearchParams({
     method: "user.getrecenttracks",
     user,
@@ -70,5 +74,5 @@ export async function fetchCurrentTrack(
   const data = await response.json() as LastFmResponse;
   signal.throwIfAborted();
   if (data.error) throw new Error(data.message || `Last.fm error ${data.error}`);
-  return parseCurrentTrack(data, user);
+  return parseRecentTrack(data, user);
 }

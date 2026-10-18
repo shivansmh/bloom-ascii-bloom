@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { parseCurrentTrack } from "./lastfm";
+import { parseRecentTrack } from "./lastfm";
 
-describe("Last.fm current track", () => {
-  it("selects the now-playing track and its largest available artwork", () => {
-    const result = parseCurrentTrack({
+describe("Last.fm recent tracks", () => {
+  it("prefers the now-playing track and its largest available artwork", () => {
+    const result = parseRecentTrack({
       recenttracks: {
         track: [
           { name: "Previous song", artist: { "#text": "Artist" } },
@@ -27,21 +27,36 @@ describe("Last.fm current track", () => {
       artist: "Artist",
       url: "https://www.last.fm/music/Artist/_/Current+song",
       artworkUrl: "https://img.test/extralarge.jpg",
+      nowPlaying: true,
     });
   });
 
-  it("does not fall back to the most recent scrobble when nothing is playing", () => {
-    const result = parseCurrentTrack({
+  it("uses the latest scrobble when no track is currently playing", () => {
+    const result = parseRecentTrack({
       recenttracks: {
-        track: [{ name: "Last song", artist: { "#text": "Artist" }, "@attr": { nowplaying: "false" } }],
+        track: [
+          {
+            name: "Last song",
+            artist: { "#text": "Artist" },
+            image: [{ size: "large", "#text": "https://img.test/last.jpg" }],
+            "@attr": { nowplaying: "false" },
+          },
+          { name: "Older song", artist: { "#text": "Artist" } },
+        ],
       },
     }, "test-user");
 
-    expect(result).toBeNull();
+    expect(result).toEqual({
+      name: "Last song",
+      artist: "Artist",
+      url: "https://www.last.fm/user/test-user",
+      artworkUrl: "https://img.test/last.jpg",
+      nowPlaying: false,
+    });
   });
 
   it("accepts Last.fm's single-object response shape", () => {
-    const result = parseCurrentTrack({
+    const result = parseRecentTrack({
       recenttracks: {
         track: {
           name: "Current song",
@@ -52,5 +67,10 @@ describe("Last.fm current track", () => {
     }, "test-user");
 
     expect(result?.url).toBe("https://www.last.fm/user/test-user");
+    expect(result?.nowPlaying).toBe(true);
+  });
+
+  it("returns null when Last.fm has no track history", () => {
+    expect(parseRecentTrack({ recenttracks: { track: [] } }, "test-user")).toBeNull();
   });
 });
