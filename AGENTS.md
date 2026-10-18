@@ -12,4 +12,5 @@
 - Use the shared Radix-based HoverWord for portfolio popups, so pointer travel, collision handling, and keyboard access stay consistent.
 - Fetch song previews in the browser from Apple's public search endpoint and require matching track/artist before playback, so unrelated recordings are never played.
 - Keep ASCII rain in an independent, pointer-transparent canvas with a pure timing helper, so showers never interrupt the portfolio links and their cadence can be tested.
+- Drive the opening wind gust from one shared `--wind-progress` value on `<html>`, with streaks drawn on their own pointer-transparent canvas and the lily reading the same value, so every layer bends and recovers together and the gust curve stays testable.
 - Decode Apple preview audio through Web Audio with a lazy AAC decoder fallback, disposing playback on song changes, so browsers without native AAC support can still play the correct recording.
