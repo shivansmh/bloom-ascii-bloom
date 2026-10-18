@@ -85,7 +85,7 @@ function Index() {
 
       <section className="z-10 flex flex-col justify-center px-8 py-10 md:px-14">
         <h1 className="font-display text-[clamp(1.9rem,3.6vw,3.2rem)] leading-[1.25] text-foreground">
-          i'm shivansh.
+          i'm <a href="https://www.linkedin.com/in/shivansh-%E2%80%8E-133b02428/" target="_blank" rel="noreferrer" className="transition-colors hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary">shivansh</a>.
           <span className="block">
             i <CodeHover /> sometimes.
           </span>
