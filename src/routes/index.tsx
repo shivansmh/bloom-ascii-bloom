@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { AsciiLily } from "@/components/AsciiLily";
+import { AsciiRain } from "@/components/AsciiRain";
 import { GithubCard } from "@/components/GithubCard";
 import { HoverWord } from "@/components/HoverWord";
 import { NowPlaying } from "@/components/NowPlaying";
@@ -66,6 +67,8 @@ function Index() {
         <div className="drift-b absolute -right-1/4 bottom-0 h-[55vmax] w-[55vmax] rounded-full bg-primary/25 blur-[120px]" />
         <div className="drift-gold absolute left-1/3 top-1/2 h-[40vmax] w-[40vmax] rounded-full bg-[oklch(0.8_0.12_85)] blur-[130px]" />
       </div>
+
+      <AsciiRain />
 
       <div className="absolute right-6 top-6 z-20 flex items-center gap-5">
       <Button variant="link" size="sm" onClick={() => setSound((value) => !value)} aria-label={sound ? "turn sound off" : "turn sound on"} aria-pressed={sound}
