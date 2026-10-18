@@ -37,7 +37,7 @@ export function AsciiRain() {
       if (!ctx || !canvas) return;
       ctx.clearRect(0, 0, width, height);
       const state = getRainState(now - started);
-      canvas.dataset.phase = reducedMotion.matches ? "idle" : state.phase;
+      canvas.dataset['phase'] = reducedMotion.matches ? "idle" : state.phase;
       if (!reducedMotion.matches && state.phase !== "idle") {
         const tokens = getComputedStyle(document.documentElement);
         const retreat = state.phase === "retracting" ? state.progress : 0;
