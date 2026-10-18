@@ -1,12 +1,6 @@
 import { useEffect, useRef } from "react";
 import { createRainDrops } from "@/lib/ascii-rain";
 
-const CLOUD = [
-  "       .--.       ",
-  "   .-(    ).-.    ",
-  "  (___.__)___)   ",
-];
-
 export function AsciiRain({ enabled }: { enabled: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -51,13 +45,6 @@ export function AsciiRain({ enabled }: { enabled: boolean }) {
       ctx.font = `11px ${tokens.getPropertyValue("--font-mono")}`;
       ctx.textBaseline = "top";
       ctx.fillStyle = tokens.getPropertyValue("--primary").trim() || "#c66";
-
-      const clouds = Math.max(3, Math.ceil(width / 280));
-      ctx.globalAlpha = 0.2;
-      for (let i = 0; i < clouds; i++) {
-        const x = ((i + 0.5) * width) / clouds - 58;
-        CLOUD.forEach((line, row) => ctx.fillText(line, x, -15 + row * 12));
-      }
 
       const elapsed = (now - started) / 1000;
       const travel = height + 80;
